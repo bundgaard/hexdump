@@ -1,27 +1,25 @@
+// Copyright David Bundgaard (C) 2023-04-03
 #define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include <windowsx.h>
+#include <Windows.h> // Used to get the Windows I/O 
 
 #include <iostream>
 #include <iomanip>
 
 int wmain(int argc, wchar_t** argv)
 {
-
-
 	if (argc < 2)
 	{
 		std::cerr << "Usage: hexview file" << std::endl;
 		exit(1);
 	}
 
-	HANDLE File = CreateFile(
-		argv[1], 
-		GENERIC_READ, 
+	HANDLE File = CreateFileW(
+		argv[1],
+		GENERIC_READ,
 		FILE_SHARE_READ,
-		nullptr, 
-		OPEN_EXISTING, 
-		FILE_ATTRIBUTE_NORMAL, 
+		nullptr,
+		OPEN_EXISTING,
+		FILE_ATTRIBUTE_NORMAL,
 		nullptr);
 
 	if (File)
@@ -95,11 +93,9 @@ int wmain(int argc, wchar_t** argv)
 					}
 				}
 				VirtualFree(Buffer, 0, MEM_FREE);
-				CloseHandle(File);
 			}
-
-
 		}
+		CloseHandle(File);
 	}
 
 	return 0;

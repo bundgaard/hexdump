@@ -3,16 +3,27 @@
 #include <windowsx.h>
 
 #include <iostream>
+#include <iomanip>
 
 int wmain(int argc, wchar_t** argv)
 {
+
+
 	if (argc < 2)
 	{
 		std::cerr << "Usage: hexview file" << std::endl;
 		exit(1);
 	}
 
-	HANDLE File = CreateFile(argv[1], GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	HANDLE File = CreateFile(
+		argv[1], 
+		GENERIC_READ, 
+		FILE_SHARE_READ,
+		nullptr, 
+		OPEN_EXISTING, 
+		FILE_ATTRIBUTE_NORMAL, 
+		nullptr);
+
 	if (File)
 	{
 		LARGE_INTEGER FileSize{};
@@ -24,8 +35,9 @@ int wmain(int argc, wchar_t** argv)
 				DWORD dwReadBytes{};
 				if (ReadFile(File, Buffer, FileSize.QuadPart, &dwReadBytes, nullptr))
 				{
-
-					std::cout << "HEX VIEW" << " name=" << argv[1] << " size=" << FileSize.QuadPart << "\n";
+					std::wcout.setf(std::ios_base::left, std::ios_base::adjustfield);
+					std::wcout << std::right << std::setw(24) << L"HEX VIEW" << L" name=" << argv[1] << L" size=" << FileSize.QuadPart << L" bytes" << "\n";
+					std::wcout << "\n";
 
 					uint8_t* Ptr = reinterpret_cast<uint8_t*>(Buffer);
 					int Width = 16;
